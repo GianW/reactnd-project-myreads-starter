@@ -24,25 +24,22 @@ class BooksApp extends React.Component {
   }
 
   updateQuery = (query) => {
+    this.setState({searchList:[], query: query.trim()})
 
-     this.setState({searchList:[], query: query.trim()})
-
-     BooksAPI.search(this.state.query).then((listBooks) => {
-
-      // const novaLista = Object.assign({}, listBooks, this.state.books)
-      // console.log(novaLista)
-      // console.log(listBooks)
-      this.setState({searchList: listBooks })
-     })
-
-   }
+    BooksAPI.search(this.state.query).then((listBooks) => {
+      return listBooks.map((book) => (this.state.books.find(function(b){ return b.id === book.id}) || book))
+    }).then((newlistBook) => {
+      this.setState({searchList: newlistBook })
+    })
+  }
 
   changeShelf = (book, event) => {
 
-    // book.shelf = event.target.value
-    // this.setState((state) => ({
-    //   books: state.books.filter((b) => b.id !== book.id).concat([ book ])
-    // }))
+    book.shelf = event.target.value
+    this.setState((state) => ({
+      books: state.books.filter((b) => b.id !== book.id).concat([ book ])
+    }))
+    //Aplica primeiro no estado local e depois de replica pro server, assim não tem 'delay'.
     BooksAPI.update(book, event.target.value).then((res) => this.updateBooks())
   }
 
@@ -60,15 +57,6 @@ class BooksApp extends React.Component {
             <div className="search-books-bar">
               { <a className="close-search" onClick={() => this.setState({ showSearchPage: false, query: '', searchList: [] })}>Close</a> }
               <div className="search-books-input-wrapper">
-                {/*
-                NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                You can find these search terms here:
-                https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-                However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-                you don't find a specific author or title. Every search is limited by search terms.
-                */
-                }
                 <DebounceInput
                   debounceTimeout={300}
                   type="text"
