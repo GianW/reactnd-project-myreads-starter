@@ -7,6 +7,7 @@ import { Route } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 
 class BooksApp extends React.Component {
+
   state = {
     books: []
   }
@@ -22,11 +23,6 @@ class BooksApp extends React.Component {
   }
 
   changeShelf = (book, shelf) => {
-    book.shelf = shelf
-    this.setState((state) => ({
-      books: state.books.filter((b) => b.id !== book.id).concat([ book ])
-    }))
-    //Aplica primeiro no estado local e depois de replica pro server, assim não tem 'delay'.
     BooksAPI.update(book, shelf).then((res) => this.updateBooks())
   }
 
@@ -51,17 +47,17 @@ class BooksApp extends React.Component {
             <div className="list-books-content">
               <BooksShelf
                 books={books.filter((book) => book.shelf === "currentlyReading")}
-                tittle={'Currently Reading'}
+                title={'Currently Reading'}
                 onChangeShelf={this.changeShelf}
               />
               <BooksShelf
                 books={books.filter((book) => book.shelf === "wantToRead")}
-                tittle={'Want to Read'}
+                title={'Want to Read'}
                 onChangeShelf={this.changeShelf}
               />
               <BooksShelf
                 books={books.filter((book) => book.shelf === "read")}
-                tittle={'Read'}
+                title={'Read'}
                 onChangeShelf={this.changeShelf}
               />
             </div>

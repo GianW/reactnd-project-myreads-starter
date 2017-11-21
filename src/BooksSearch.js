@@ -14,11 +14,16 @@ class BooksSearch extends Component{
     updateQuery = (query) => {
       this.setState({searchList:[], query: query.trim()})
 
-      BooksAPI.search(this.state.query).then((listBooks) => {
-        return listBooks.map((book) => (this.props.books.find(function(b){ return b.id === book.id}) || book))
-      }).then((newlistBook) => {
-        this.setState({searchList: newlistBook })
-      })
+      if (this.state.query.length > 0) {
+        BooksAPI.search(this.state.query).then((listBooks) => {
+          if (listBooks.error === undefined) {
+            return listBooks.map(book => this.props.books.find(b => b.id === book.id) || book)
+          }
+        }).then((newlistBook) => {
+          this.setState({searchList: newlistBook })
+        })
+      }
+
     }
 
   render() {
@@ -44,7 +49,7 @@ class BooksSearch extends Component{
             {searchList && (
               <BooksShelf
                 books={searchList}
-                tittle={''}
+                title={''}
                 onChangeShelf={this.props.onChangeShelf}
               />
             )}

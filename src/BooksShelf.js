@@ -3,12 +3,12 @@ import PropTypes from 'prop-types'
 
 function BooksShelf(props){
 
-  const { books, tittle  } = props
+  const { books, title  } = props
   const capaPadrao = "https://d1pkzhm5uq4mnt.cloudfront.net/imagens/capas/_822a5d14da9a2c8b035750e0f1838e2c186360a9.jpg"
 
   return (
     <div className="bookshelf">
-      <h2 className="bookshelf-title"> {tittle} </h2>
+      <h2 className="bookshelf-title"> {title} </h2>
       <div className="bookshelf-books">
         <ol className="books-grid">
           {books && books.map(book => (
@@ -39,7 +39,7 @@ function BooksShelf(props){
 
 BooksShelf.PropTypes = {
   books: PropTypes.array.isRequired,
-  tittle: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
   onChangeShelf: PropTypes.func.isRequired
 }
 
